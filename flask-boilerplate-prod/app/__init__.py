@@ -22,6 +22,8 @@ import redis
 from rq import Queue
 from rq_scheduler import Scheduler
 import yaml
+from flask_seeder import FlaskSeeder
+
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(base_dir)
@@ -190,7 +192,11 @@ app = Flask(__name__)
 app_set_configurations(application=app, config_data=config_data)
 db = SQLAlchemy(app, session_options={'expire_on_commit': False})
 migrate = Migrate(app=app, db=db, compare_type=True)
-# CORS(app, resources={r'/api/*': {'origins': '*'}})
+
+
+seeder = FlaskSeeder()
+seeder.init_app(app, db)
+
 r = redis.Redis(host=config_data.get('REDIS').get('HOST'), port=config_data.get(
     'REDIS').get('PORT'), db=config_data.get('REDIS').get('DB'))
 send_mail_q = Queue(QueueName.SEND_MAIL, connection=r)
