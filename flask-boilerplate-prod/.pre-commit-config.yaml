@@ -1,0 +1,101 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+      - id: check-json # Attempts to load all json files to verify syntax.
+      - id: pretty-format-json # Checks that all your JSON files are pretty. "Pretty" here means that keys are sorted and indented.
+        args:
+          - "--autofix"
+          - "--indent=4"
+          - "--no-sort-keys"
+      - id: check-merge-conflict # Check for files that contain merge conflict strings.
+      - id: check-yaml # Attempts to load all yaml files to verify syntax.
+      - id: detect-private-key # Checks for the existence of private keys.
+      - id: double-quote-string-fixer # This hook replaces double quoted strings with single quoted strings.
+      - id: end-of-file-fixer # Makes sure files end in a newline and only a newline.
+      - id: requirements-txt-fixer # Sorts entries in requirements.txt and removes incorrect entry for pkg-resources==0.0.0
+      - id: sort-simple-yaml # Sorts simple YAML files which consist only of top-level keys, preserving comments and blocks.
+        files: ^config/
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-added-large-files
+        args: ['--maxkb=2048']
+      - id: no-commit-to-branch
+        args: [--branch, master, --branch, development, '--pattern', '^(?!(feature|hotfix|docs|bugfix|style|refactor|perf)\/).*']
+      - id: detect-aws-credentials  # detects your aws credentials from the aws cli credentials file.
+      - id: name-tests-test  # This hook verifies that test files are named correctly.
+        args:
+          - "--pytest-test-first"  # This ensures tests match `test_.*\.py`
+      - id: check-case-conflict  # Check for files with names that would conflict on a case-insensitive filesystem like MacOS HFS+ or Windows FAT.
+      - id: mixed-line-ending  # Replaces automatically the most frequent line ending.
+
+- repo: https://github.com/asottile/pyupgrade
+  rev: v3.7.0
+  hooks:
+    - id: pyupgrade # Pre-commit hook to automatically upgrade syntax for newer versions of the language.
+- repo: https://github.com/pre-commit/pygrep-hooks
+  rev: v1.10.0  # Use the ref you want to point at
+  hooks:
+    - id: text-unicode-replacement-char # Forbid files which have a UTF-8 Unicode replacement character
+    - id: python-use-type-annotations # Enforce that python3.6+ type annotations are used instead of type comments
+- repo: https://github.com/MarcoGorelli/absolufy-imports
+  rev: v0.3.1
+  hooks:
+    - id: absolufy-imports # Automatically convert relative imports to absolute
+- repo: https://github.com/jendrikseipp/vulture
+  rev: v2.7
+  hooks:
+    - id: vulture # https://github.com/jendrikseipp/vulture
+- repo: https://github.com/sqlalchemyorg/zimports/
+  rev: v0.6.0
+  hooks:
+    - id: zimports # https://github.com/sqlalchemyorg/zimports
+- repo: https://github.com/dannysepler/rm_unneeded_f_str
+  rev: v0.2.0
+  hooks:
+    - id: rm-unneeded-f-str # Find and replace unneeded f-strings in your code.
+-   repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+    - id: flake8 # Powerful tool that checks our code's compliance to PEP8.
+      additional_dependencies: ['flake8-force-keyword-arguments', 'flake8-comprehensions', 'flake8-requirements', 'pep8-naming']
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: 'v2.0.1'
+    hooks:
+      - id: autopep8 # autopep8 automatically formats Python code to conform to the PEP 8 style guide.
+        args: ["-i"]
+-   repo: https://github.com/dhruvmanila/remove-print-statements
+    rev: 'v0.5.0'
+    hooks:
+    - id: remove-print-statements
+      args: ['--verbose']   # Show all the print statements to be removed
+-   repo: https://github.com/pre-commit/mirrors-pylint
+    rev: 'v3.0.0a5'
+    hooks:
+    -   id: pylint # implemented pylint for only checking function and parameters name
+        args: [--disable=all,--enable=E1120,C0103,W0613,W0612]
+-   repo: https://github.com/mattseymour/pre-commit-pytype
+    rev: '2022.4.26'
+    hooks:
+    -   id: pytype
+- repo: https://github.com/econchick/interrogate
+  rev: '1.5.0'
+  hooks:
+    - id: interrogate
+      exclude: ^(workers/|providers/|migrations/)
+      args: [--config=pyproject.toml]
+
+- repo: local
+  hooks:
+    - id: pytest-check
+      name: pytest-check
+      entry: pytest
+      language: system
+      pass_filenames: false
+      always_run: true
+    - id: update-requirements
+      name: Update requirements.txt
+      entry: bash -c 'pip freeze > requirements.txt'
+      language: system
+      types: [ python ]
+      always_run: true

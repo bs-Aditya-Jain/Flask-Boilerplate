@@ -1,0 +1,337 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Boiler Plate API",
+        "description": "These are the APIs for starboard. Must be used only by the authorized person.",
+        "version": "1.0.0"
+    },
+    "externalDocs": {
+        "description": "Created by: Bombay Softwares",
+        "url": "https://www.bombaysoftwares.com/"
+    },
+    "paths": {
+        "/api/v1/user/auth": {
+            "post": {
+                "description": "Login for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "admin@project.com",
+                                    "pin": "12345"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "User login successfully.",
+                        "schema": {
+                            "type": "object",
+                            "example": {
+                                "data": {
+                                    "details": {
+                                        "address": null,
+                                        "country_code": null,
+                                        "created_at": "Fri, 19 May 2023 19:42:11 GMT",
+                                        "email": "dhanashree.kulkarni+boilerplate@bombaysoftwares.com",
+                                        "first_name": "InitialUser",
+                                        "id": 3,
+                                        "last_name": null,
+                                        "name": "Initialuser",
+                                        "phone": "9876543210",
+                                        "updated_at": "Mon, 22 May 2023 10:51:13 GMT"
+                                    },
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZXhwIjoxNjg5OTE2OTA0fQ.a5A1CP1w1DWDRwc__T_JXHOorK_DHKvdiJXdqw1ILxk"
+                                },
+                                "message": "Hi InitialUser, great to see you!",
+                                "status": true
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "User"
+                ]
+            }
+        },
+        "/api/v1/log/audit": {
+            "get": {
+                "tags": [
+                    "Log"
+                ],
+                "description": "Returns list of audit logs with details like user_name, table_name, ip_address, etc. from audit log table.",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "pagination",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "Please enter comma (,) seperated string.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "Please enter comma (,) seperated string.",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Details fetched successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "data": {
+                                            "current_page": 1,
+                                            "current_page_count": 1,
+                                            "next_page": 2,
+                                            "objects": {
+                                                "user": []
+                                            },
+                                            "result": [
+                                                {
+                                                    "action": "update",
+                                                    "created_at": "Fri, 02 Jun 2023 14:12:50 GMT",
+                                                    "id": 119,
+                                                    "ip_address": "127.0.0.1",
+                                                    "table_name": "user",
+                                                    "user_name": ""
+                                                }
+                                            ],
+                                            "total_count": 119
+                                        },
+                                        "message": "Details Fetched Successfully.",
+                                        "status": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "jwt_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/log/audit-detail": {
+            "get": {
+                "tags": [
+                    "Log"
+                ],
+                "description": "Returns audit log details like action, args, body, created_at, headers, ip, method, object_id, etc.\n    from audit log table of the passed ID.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Details fetched successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "data": {
+                                            "api_log_data": {
+                                                "action": "create",
+                                                "args": {},
+                                                "body": {
+                                                    "email": "lb1@gmail.com"
+                                                },
+                                                "created_at": "31/05/2023",
+                                                "headers": {
+                                                    "Accept": "*/*",
+                                                    "Accept-Encoding": "gzip, deflate, br",
+                                                    "Connection": "keep-alive",
+                                                    "Content-Length": "42",
+                                                    "Content-Type": "application/json",
+                                                    "Host": "localhost:5000",
+                                                    "Postman-Token": "0866e343-48f6-4efa-8813-6e2b6b3190f6",
+                                                    "User-Agent": "PostmanRuntime/7.28.4"
+                                                },
+                                                "id": 19,
+                                                "ip": "127.0.0.1",
+                                                "method": "POST",
+                                                "object_id": "861dedc1-7972-42cd-8a4b-937dc1304eda",
+                                                "state_after": {
+                                                    "created_at": "2023/05/31 15:51:10",
+                                                    "created_by_id": null,
+                                                    "email": "lokeshbadolia5@gmail.com",
+                                                    "is_valid": true,
+                                                    "magic_link": "https://starboard/user/authenticate-token?token=clJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0aW1lc3RhbXAiOjE2ODU1Mjg0NzAuMTc3NTcyLCJpZCI6MTIsIm9yZ19pZCI6bnVsbH0.DpkwR2d0A605sLfS3LG5m4WOGMD85p_BS92YCPahbI8",
+                                                    "token": "clJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0aW1lc3RhbXAiOjE2ODU1Mjg0NzAuMTc3NTcyLCJpZCI6MTIsIm9yZ19pZCI6bnVsbH0.DpkwR2d0A605sLfS3LG5m4WOGMD85p_BS92YCPahbI8",
+                                                    "updated_at": null,
+                                                    "updated_by_id": null,
+                                                    "uuid": "861dedc1-7972-42cd-8a4b-937dc1304eda"
+                                                },
+                                                "state_before": {},
+                                                "url": "http://localhost:5000/api/v1/user/request-login-link",
+                                                "user_name": "POST"
+                                            }
+                                        },
+                                        "message": "Details Fetched Successfully.",
+                                        "status": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "jwt_token": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "required": [
+                    "first_name",
+                    "primary_email",
+                    "primary_phone"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "primary_email": {
+                        "type": "string"
+                    },
+                    "primary_phone": {
+                        "type": "string"
+                    },
+                    "pin": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "auth_token": {
+                        "type": "string"
+                    },
+                    "email_verified_on": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "mobile_verified_on": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "last_login_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "address": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "zip_code": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "deactivated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "created_by": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updated_by": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "xml": {
+                    "name": "User"
+                }
+            }
+        },
+        "securitySchemes": {
+            "jwt_token": {
+                "type": "apiKey",
+                "name": "x-access-token",
+                "in": "header"
+            }
+        }
+    }
+}

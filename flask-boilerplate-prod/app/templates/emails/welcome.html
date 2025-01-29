@@ -1,0 +1,165 @@
+{% extends "emails/base.html" %} {% block main %}
+<tr style="border-collapse: collapse">
+  <td
+    align="left"
+    style="
+      padding: 0;
+      margin: 0;
+      padding-top: 10px;
+      padding-left: 20px;
+      padding-right: 20px;
+    "
+  >
+    <p
+      style="
+        margin: 0;
+        -webkit-text-size-adjust: none;
+        -ms-text-size-adjust: none;
+        mso-line-height-rule: exactly;
+        font-size: 24px;
+        font-family: arial, 'helvetica neue', helvetica, sans-serif;
+        line-height: 36px;
+        color: #002858;
+      "
+    >
+      Hello {{data.first_name}},
+    </p>
+  </td>
+</tr>
+<tr style="border-collapse: collapse">
+  <td
+    align="left"
+    style="
+      padding: 0;
+      margin: 0;
+      padding-top: 15px;
+      padding-left: 20px;
+      padding-right: 20px;
+    "
+  >
+    <p
+      style="
+        margin: 0;
+        -webkit-text-size-adjust: none;
+        -ms-text-size-adjust: none;
+        mso-line-height-rule: exactly;
+        font-size: 16px;
+        font-family: arial, 'helvetica neue', helvetica, sans-serif;
+        line-height: 24px;
+        color: #3d3d3d;
+      "
+    >
+      You're invited to the Project as an admin with the following credentials:
+    </p>
+  </td>
+</tr>
+
+<tr style="border-collapse: collapse">
+  <td
+    align="left"
+    style="
+      padding: 0;
+      margin: 0;
+      padding-top: 15px;
+      padding-left: 20px;
+      padding-right: 20px;
+    "
+  >
+    <p
+      style="
+        margin: 0;
+        -webkit-text-size-adjust: none;
+        -ms-text-size-adjust: none;
+        mso-line-height-rule: exactly;
+        font-size: 16px;
+        font-family: arial, 'helvetica neue', helvetica, sans-serif;
+        line-height: 24px;
+        color: #3d3d3d;
+      "
+    >
+      Email ID : {{ data.email }} <br />Password : {{ data.pin }}
+    </p>
+  </td>
+</tr>
+<tr style="border-collapse: collapse">
+  <td
+    align="left"
+    style="
+      padding: 0;
+      margin: 0;
+      padding-top: 15px;
+      padding-left: 20px;
+      padding-right: 20px;
+    "
+  >
+    <p
+      style="
+        margin: 0;
+        -webkit-text-size-adjust: none;
+        -ms-text-size-adjust: none;
+        mso-line-height-rule: exactly;
+        font-size: 16px;
+        font-family: arial, 'helvetica neue', helvetica, sans-serif;
+        line-height: 24px;
+        color: #3d3d3d;
+      "
+    >
+      Please click on this button with your account credentials to login as an
+      admin.
+    </p>
+  </td>
+</tr>
+<tr style="border-collapse: collapse">
+  <td
+    align="center"
+    style="
+      padding: 0;
+      margin: 0;
+      padding-top: 15px;
+      padding-left: 20px;
+      padding-right: 20px;
+    "
+  >
+    <span
+      class="es-button-border"
+      style="
+        border-style: solid;
+        border-color: #2cb543;
+        background: #002858;
+        border-width: 0px;
+        display: inline-block;
+        border-radius: 5px;
+        width: auto;
+      "
+    >
+      <a
+        href="https://admin.staging.com/login"
+        target="_blank"
+        class="es-button"
+        style="
+          mso-style-priority: 100 !important;
+          text-decoration: none;
+          -webkit-text-size-adjust: none;
+          -ms-text-size-adjust: none;
+          mso-line-height-rule: exactly;
+          font-size: 18px;
+          color: #ffffff;
+          border-style: solid;
+          border-color: #002858;
+          border-width: 15px 30px;
+          display: inline-block;
+          background: #002858;
+          border-radius: 5px;
+          font-weight: normal;
+          font-style: normal;
+          line-height: 10px;
+          width: auto;
+          text-align: center;
+        "
+        >Project Admin</a
+      ></span
+    >
+  </td>
+</tr>
+
+{% endblock %}
