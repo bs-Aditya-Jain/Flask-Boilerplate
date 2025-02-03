@@ -23,7 +23,8 @@ from rq import Queue
 from rq_scheduler import Scheduler
 import yaml
 from flask_seeder import FlaskSeeder
-
+import datetime
+from datetime import timedelta
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(base_dir)
@@ -186,6 +187,13 @@ def clear_scheduler():
     scheduler = Scheduler(connection=r)
     for job in scheduler.get_jobs():
         scheduler.cancel(job)
+    scheduler.schedule(
+        scheduled_time=datetime.utcnow() + timedelta(seconds=2),  # Delay start
+        func=clear_scheduler,  # Function to run
+        interval=2,  # Run every 2 seconds
+        repeat=None  # Run indefinitely (change to a number if you want it to stop after X times)
+        )
+
 
 
 app = Flask(__name__)
