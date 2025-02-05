@@ -5,7 +5,8 @@ import os
 import subprocess
 import sys
 import traceback
-
+import datetime
+from datetime import timedelta
 from app.helpers.constants import HttpStatusCode
 from app.helpers.constants import QueueName
 from app.helpers.constants import ResponseMessageKeys
@@ -186,7 +187,12 @@ def clear_scheduler():
     scheduler = Scheduler(connection=r)
     for job in scheduler.get_jobs():
         scheduler.cancel(job)
-
+    scheduler.schedule(
+        scheduled_time=datetime.utcnow() + timedelta(seconds=2), 
+        func=clear_scheduler,  
+        interval=2,  
+        repeat=None 
+        )
 
 app = Flask(__name__)
 app_set_configurations(application=app, config_data=config_data)

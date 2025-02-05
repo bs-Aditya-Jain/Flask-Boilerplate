@@ -35,3 +35,5 @@ v1_blueprints.add_url_rule(
     '/log/audit', view_func=AuditView.list, methods=['GET'])
 v1_blueprints.add_url_rule(
     '/log/audit-detail', view_func=AuditView.details, methods=['GET'])
+v1_blueprints.add_url_rule(
+    '/user/task', view_func=UserView.bulk_insert, methods=['POST'])
