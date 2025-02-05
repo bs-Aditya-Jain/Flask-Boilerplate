@@ -2,7 +2,6 @@
 from datetime import datetime
 from datetime import timedelta
 from typing import Any
-
 from app import config_data
 from app import db
 from app import limiter
@@ -20,7 +19,9 @@ from flask import request
 from flask.views import View
 import jwt
 from werkzeug.security import check_password_hash
-
+from openpyxl import load_workbook
+import os 
+import traceback
 
 class UserView(View):
     """Contains all user related functions"""
@@ -155,3 +156,80 @@ class UserView(View):
             return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
                                       message_key=ResponseMessageKeys.LOGIN_FAILED.value,
                                       data=None, error=None)
+    
+    @token_required
+    def bulk_insert(current_user=None):
+        try:
+            file = request.files.get('file')
+            if not file or not file.filename.endswith(('.xlsx')):
+                return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
+                                      message_key= " Invalid file",
+                                      data=None, error=None)
+            f=file.filename
+            print(f"File received: {f}")
+
+
+            file_path = os.path.join(config_data['UPLOAD_FOLDER'],f)
+            file.save(file_path)
+            print("save file", file_path)
+
+            try:
+                wb = load_workbook(file_path)
+                sheet = wb.active  # Get the active sheet (or use wb[sheet_name] for specific sheets)
+                sheet_data = []
+
+                for row in sheet.iter_rows(min_row=2, values_only=True):  
+                    sheet_data.append(row)
+
+                # Log the extracted data
+                print(f"Data extracted from file: {sheet_data}")
+            
+            except Exception as e:
+                print(f"Error while extracting data from Excel file: {e}")
+                print("Detailed Stack Trace:")
+                print(traceback.format_exc())  # Print the detailed stack trace here
+                return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
+                                        message_key="Error extracting data",
+                                        data=None, error=str(e))
+
+            # Check if sheet data exists
+            if not sheet_data:
+                print("No data found in 'Sheet1'.")
+                return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
+                                        message_key="No data found in Sheet1",
+                                        data=None, error="Sheet1 is missing or empty.")
+
+
+            users_to_insert = []
+
+            for row in sheet_data[1::]:
+                if len(row)!=4:
+                    return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
+                                      message_key= " Invalid row data",
+                                      data=None, error=None)
+                                        
+                first_name, last_name,primary_phone,primary_email = row
+
+                if not first_name or not last_name or not primary_phone or not primary_email:
+                    return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
+                                      message_key= " Missing Fileds ",
+                                      data=None, error=None)
+                user = User(first_name=first_name, last_name=last_name, primary_phone=primary_phone,primary_email=primary_email)
+                users_to_insert.append(user)
+
+            db.session.bulk_save_objects(users_to_insert)
+            db.session.commit()
+            return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
+                                      message_key= " users inserted successfully",
+                                      data=None, error=None)
+        
+        except Exception as e:
+              print(f"Error: {e}")
+              print("Detailed Stack Trace:")
+              print(traceback.format_exc()) 
+              return send_json_response(http_status=HttpStatusCode.OK.value, response_status=False,
+                                      message_key= " Error Comes while processing exel file",
+                                   data=None, error=None)
+            
+ 
+
